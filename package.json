@@ -1,0 +1,32 @@
+{
+  "name": "telegraf-logger",
+  "version": "0.1.0",
+  "description": "A simple logging incoming updates middleware for Telegraf bot framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drvirtuozov/telegraf-logger.git"
+  },
+  "keywords": [
+    "telegram",
+    "telegraf",
+    "middleware"
+  ],
+  "author": "drvirtuozov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drvirtuozov/telegraf-logger/issues"
+  },
+  "homepage": "https://github.com/drvirtuozov/telegraf-logger#readme",
+  "engines": {
+    "node": ">=6.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "eslint-config-airbnb-base": "^11.1.2",
+    "eslint-plugin-import": "^2.2.0"
+  }
+}
