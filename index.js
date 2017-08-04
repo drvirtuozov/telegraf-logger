@@ -1,33 +1,44 @@
-module.exports = function logger() {
-  return (ctx, next) => {
-    const { username, first_name: firstName, last_name: lastName, id } = ctx.from;
-    let content = null;
+class TelegrafLogger {
 
-    switch (ctx.updateType) {
-      case 'message':
-        if (ctx.message.text) {
-          content = ctx.message.text;
-        } else if (ctx.message.sticker) {
-          content = ctx.message.sticker.emoji;
-        } else {
-          content = '';
-        }
+  constructor(options) {
+    this.options = Object.assign({
+      log: console.log,
+    }, options);
+  }
 
-        break;
+  middleware() {
+    return (ctx, next) => {
+      const { username, first_name: firstName, last_name: lastName, id } = ctx.from;
+      let content = null;
 
-      case 'callback_query':
-        content = ctx.callbackQuery.data;
-        break;
+      switch (ctx.updateType) {
+        case 'message':
+          if (ctx.message.text) {
+            content = ctx.message.text;
+          } else if (ctx.message.sticker) {
+            content = ctx.message.sticker.emoji;
+          } else {
+            content = '';
+          }
 
-      case 'inline_query':
-        content = ctx.inlineQuery.query;
-        break;
+          break;
 
-      default: content = '';
-    }
+        case 'callback_query':
+          content = ctx.callbackQuery.data;
+          break;
 
-    const text = `${ctx.me ? `${ctx.me} => ` : ''}${username ? `[${username}]` : ''} ${firstName + (lastName ? ` ${lastName}` : '')} (${id}): <${ctx.updateSubType || ctx.updateType}> ${content.replace(/\n/g, ' ')}`;
-    console.log(text.length > 200 ? `${text.slice(0, 200)}...` : text);
-    next();
-  };
-};
+        case 'inline_query':
+          content = ctx.inlineQuery.query;
+          break;
+
+        default: content = '';
+      }
+
+      const text = `${ctx.me ? `${ctx.me} => ` : ''}${username ? `[${username}]` : ''} ${firstName + (lastName ? ` ${lastName}` : '')} (${id}): <${ctx.updateSubType || ctx.updateType}> ${content.replace(/\n/g, ' ')}`;
+      this.options.log(text.length > 200 ? `${text.slice(0, 200)}...` : text);
+      next();
+    };
+  }
+}
+
+module.exports = TelegrafLogger;
