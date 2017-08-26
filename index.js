@@ -51,7 +51,7 @@ class TelegrafLogger {
       }
 
       this.options.log(text.replace(/%content/g, content));
-      next();
+      return next();
     };
   }
 }
