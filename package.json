@@ -1,6 +1,6 @@
 {
   "name": "telegraf-logger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple logging incoming updates middleware for Telegraf bot framework",
   "main": "index.js",
   "scripts": {
