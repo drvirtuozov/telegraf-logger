@@ -1,4 +1,6 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable no-console */
+
 class TelegrafLogger {
   constructor(options) {
     this.options = Object.assign({
@@ -42,7 +44,7 @@ class TelegrafLogger {
         .replace(/%firstName/g, ctx.from.first_name)
         .replace(/%lastName/g, ctx.from.last_name || '')
         .replace(/%id/g, ctx.from.id)
-        .replace(/%updateType/g, ctx.updateSubType || ctx.updateType)
+        .replace(/%updateType/g, ctx.updateSubTypes[0] || ctx.updateType)
         .replace(/ +|\n/g, ' ');
       content = content.replace(/\n/g, ' ');
 
