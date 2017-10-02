@@ -44,7 +44,7 @@ class TelegrafLogger {
         .replace(/%firstName/g, ctx.from.first_name)
         .replace(/%lastName/g, ctx.from.last_name || '')
         .replace(/%id/g, ctx.from.id)
-        .replace(/%updateType/g, ctx.updateSubTypes[0] || ctx.updateType)
+        .replace(/%updateType/g, ctx.updateSubType || ctx.updateSubTypes[0] || ctx.updateType)
         .replace(/ +|\n/g, ' ');
       content = content.replace(/\n/g, ' ');
 
