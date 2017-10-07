@@ -44,6 +44,11 @@ class TelegrafLogger {
           content = ctx.inlineQuery.query;
           break;
 
+        case 'chosen_inline_result':
+          updateTypeId = ctx.chosenInlineResult.result_id;
+          content = ctx.chosenInlineResult.query;
+          break;
+
         case 'shipping_query':
           updateTypeId = ctx.shippingQuery.id;
           content = ctx.shippingQuery.invoice_payload;
