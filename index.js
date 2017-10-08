@@ -34,6 +34,24 @@ class TelegrafLogger {
           content = ctx.editedMessage.text;
           break;
 
+        case 'channel_post':
+          updateTypeId = ctx.channelPost.message_id;
+
+          if (ctx.channelPost.text) {
+            content = ctx.channelPost.text;
+          } else if (ctx.channelPost.sticker) {
+            content = ctx.channelPost.sticker.emoji;
+          } else {
+            content = '';
+          }
+
+          break;
+
+        case 'edited_channel_post':
+          updateTypeId = ctx.editedChannelPost.message_id;
+          content = ctx.editedChannelPost.text;
+          break;
+
         case 'callback_query':
           updateTypeId = ctx.callbackQuery.id;
           content = ctx.callbackQuery.data;
