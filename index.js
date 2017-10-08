@@ -82,28 +82,29 @@ class TelegrafLogger {
           updateTypeId = 0;
       }
 
+      const { from = {}, chat = {}, session = {} } = ctx;
       const text = this.options.format
         .replace(/%botUsername\b/igm, ctx.me || null)
-        .replace(/%username\b/igm, ctx.from.username || null)
-        .replace(/%firstName\b/igm, ctx.from.first_name)
-        .replace(/%lastName\b/igm, ctx.from.last_name || '')
-        .replace(/%fromId\b/igm, ctx.from.id)
-        .replace(/%chatId\b/igm, ctx.chat && ctx.chat.id)
-        .replace(/%chatType\b/igm, ctx.chat && ctx.chat.type)
-        .replace(/%chatTitle\b/igm, (ctx.chat && ctx.chat.title) || null)
-        .replace(/%chatUsername\b/igm, (ctx.chat && ctx.chat.username) || null)
+        .replace(/%username\b/igm, from.username || null)
+        .replace(/%firstName\b/igm, from.first_name)
+        .replace(/%lastName\b/igm, from.last_name || '')
+        .replace(/%fromId\b/igm, from.id)
+        .replace(/%chatId\b/igm, chat.id || null)
+        .replace(/%chatType\b/igm, chat.type || null)
+        .replace(/%chatTitle\b/igm, chat.title || null)
+        .replace(/%chatUsername\b/igm, chat.username || null)
         .replace(/%updateId\b/igm, ctx.update.update_id)
         .replace(/%updateType\b/igm, ctx.updateType)
         .replace(/%updateTypeId\b/igm, updateTypeId)
         .replace(/%updateSubType\b/igm, ctx.updateSubType || ctx.updateSubTypes[0] || ctx.updateType)
-        .replace(/%sceneId\b/igm, (ctx.session && ctx.session._flow && ctx.session._flow.id) || null)
-        .replace(/ +|\n/g, ' ');
+        .replace(/%sceneId\b/igm, (session._flow && session._flow.id) || null)
+        .replace(/ +/g, ' ');
 
       if (content.length > this.options.contentLength) {
         content = `${content.slice(0, this.options.contentLength)}...`;
       }
 
-      this.options.log(text.replace(/%content\b/igm, content).replace(/\n/g, ' '));
+      this.options.log(text.replace(/%content\b/igm, content.replace(/\n/g, ' ')));
       return next();
     };
   }
