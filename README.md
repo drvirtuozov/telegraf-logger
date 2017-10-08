@@ -20,5 +20,5 @@ bot.use(logger.middleware());
 ```
 ### Available Placeholders
 ```
-botUsername, username, firstName, lastName, fromId, chatId, chatType, chatTitle, chatUsername, updateId, updateType, updateTypeId, updateSubType, sceneId
+botUsername, username, firstName, lastName, fromId, chatId, chatType, chatTitle, chatUsername, updateId, updateType, updateTypeId, updateSubType, sceneId, content
 ```

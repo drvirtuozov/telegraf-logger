@@ -79,7 +79,7 @@ class TelegrafLogger {
 
         default:
           content = '';
-          updateTypeId = 0;
+          updateTypeId = null;
       }
 
       const { from = {}, chat = {}, session = {} } = ctx;
