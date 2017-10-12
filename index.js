@@ -31,7 +31,7 @@ class TelegrafLogger {
 
         case 'edited_message':
           updateTypeId = ctx.editedMessage.message_id;
-          content = ctx.editedMessage.text;
+          content = ctx.editedMessage.text || '';
           break;
 
         case 'channel_post':
@@ -49,32 +49,32 @@ class TelegrafLogger {
 
         case 'edited_channel_post':
           updateTypeId = ctx.editedChannelPost.message_id;
-          content = ctx.editedChannelPost.text;
+          content = ctx.editedChannelPost.text || '';
           break;
 
         case 'callback_query':
           updateTypeId = ctx.callbackQuery.id;
-          content = ctx.callbackQuery.data;
+          content = ctx.callbackQuery.data || '';
           break;
 
         case 'inline_query':
           updateTypeId = ctx.inlineQuery.id;
-          content = ctx.inlineQuery.query;
+          content = ctx.inlineQuery.query || '';
           break;
 
         case 'chosen_inline_result':
           updateTypeId = ctx.chosenInlineResult.result_id;
-          content = ctx.chosenInlineResult.query;
+          content = ctx.chosenInlineResult.query || '';
           break;
 
         case 'shipping_query':
           updateTypeId = ctx.shippingQuery.id;
-          content = ctx.shippingQuery.invoice_payload;
+          content = ctx.shippingQuery.invoice_payload || '';
           break;
 
         case 'pre_checkout_query':
           updateTypeId = ctx.preCheckoutQuery.id;
-          content = ctx.preCheckoutQuery.invoice_payload;
+          content = ctx.preCheckoutQuery.invoice_payload || '';
           break;
 
         default:
