@@ -82,7 +82,7 @@ class TelegrafLogger {
           updateTypeId = null;
       }
 
-      const { from = {}, chat = {}, session = {} } = ctx;
+      const { from = {}, chat = {}, session = {}, updateSubTypes = [] } = ctx;
       const text = this.options.format
         .replace(/%botUsername\b/igm, ctx.me || null)
         .replace(/%username\b/igm, from.username || null)
@@ -96,7 +96,7 @@ class TelegrafLogger {
         .replace(/%updateId\b/igm, ctx.update.update_id)
         .replace(/%updateType\b/igm, ctx.updateType)
         .replace(/%updateTypeId\b/igm, updateTypeId)
-        .replace(/%updateSubType\b/igm, ctx.updateSubType || ctx.updateSubTypes[0] || ctx.updateType)
+        .replace(/%updateSubType\b/igm, ctx.updateSubType || updateSubTypes[0] || ctx.updateType)
         .replace(/%sceneId\b/igm, (session._flow && session._flow.id) || null)
         .replace(/ +/g, ' ');
 
