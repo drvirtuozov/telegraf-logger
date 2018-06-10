@@ -5,7 +5,7 @@ class TelegrafLogger {
   constructor(options) {
     this.options = Object.assign({
       log: console.log,
-      format: '%updateType => @%username %firstName %lastName (%fromId): <%updateSubType> %content',
+      format: '%ut => @%u %fn %ln (%fi): <%ust> %c',
       contentLength: 100,
     }, options);
   }
@@ -84,27 +84,27 @@ class TelegrafLogger {
 
       const { from = {}, chat = {}, session = {}, updateSubTypes = [] } = ctx;
       const text = this.options.format
-        .replace(/%botUsername\b/igm, ctx.me || null)
-        .replace(/%username\b/igm, from.username || null)
-        .replace(/%firstName\b/igm, from.first_name)
-        .replace(/%lastName\b/igm, from.last_name || '')
-        .replace(/%fromId\b/igm, from.id)
-        .replace(/%chatId\b/igm, chat.id || null)
-        .replace(/%chatType\b/igm, chat.type || null)
-        .replace(/%chatTitle\b/igm, chat.title || null)
-        .replace(/%chatUsername\b/igm, chat.username || null)
-        .replace(/%updateId\b/igm, ctx.update.update_id)
-        .replace(/%updateType\b/igm, ctx.updateType)
-        .replace(/%updateTypeId\b/igm, updateTypeId)
-        .replace(/%updateSubType\b/igm, ctx.updateSubType || updateSubTypes[0] || ctx.updateType)
-        .replace(/%sceneId\b/igm, (session._flow && session._flow.id) || null)
+        .replace(/%me\b/igm, ctx.me || null)
+        .replace(/%u\b/igm, from.username || null)
+        .replace(/%fn\b/igm, from.first_name)
+        .replace(/%ln\b/igm, from.last_name || '')
+        .replace(/%fi\b/igm, from.id)
+        .replace(/%ci\b/igm, chat.id || null)
+        .replace(/%ct\b/igm, chat.type || null)
+        .replace(/%ctl\b/igm, chat.title || null)
+        .replace(/%cu\b/igm, chat.username || null)
+        .replace(/%ui\b/igm, ctx.update.update_id)
+        .replace(/%ut\b/igm, ctx.updateType)
+        .replace(/%uti\b/igm, updateTypeId)
+        .replace(/%ust\b/igm, ctx.updateSubType || updateSubTypes[0] || ctx.updateType)
+        .replace(/%si\b/igm, (session.__scenes && session.__scenes.current) || null)
         .replace(/ +/g, ' ');
 
       if (content.length > this.options.contentLength) {
         content = `${content.slice(0, this.options.contentLength)}...`;
       }
 
-      this.options.log(text.replace(/%content\b/igm, content.replace(/\n/g, ' ')));
+      this.options.log(text.replace(/%c\b/igm, content.replace(/\n/g, ' ')));
       return next();
     };
   }
