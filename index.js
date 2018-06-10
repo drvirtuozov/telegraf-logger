@@ -5,7 +5,7 @@ class TelegrafLogger {
   constructor(options) {
     this.options = Object.assign({
       log: console.log,
-      format: '%updateType => @%username %firstName %lastName (%fromId): <%updateSubType> %content',
+      format: '%ut => @%u %fn %ln (%fi): <%ust> %c',
       contentLength: 100,
     }, options);
   }
@@ -31,7 +31,7 @@ class TelegrafLogger {
 
         case 'edited_message':
           updateTypeId = ctx.editedMessage.message_id;
-          content = ctx.editedMessage.text;
+          content = ctx.editedMessage.text || '';
           break;
 
         case 'channel_post':
@@ -49,32 +49,32 @@ class TelegrafLogger {
 
         case 'edited_channel_post':
           updateTypeId = ctx.editedChannelPost.message_id;
-          content = ctx.editedChannelPost.text;
+          content = ctx.editedChannelPost.text || '';
           break;
 
         case 'callback_query':
           updateTypeId = ctx.callbackQuery.id;
-          content = ctx.callbackQuery.data;
+          content = ctx.callbackQuery.data || '';
           break;
 
         case 'inline_query':
           updateTypeId = ctx.inlineQuery.id;
-          content = ctx.inlineQuery.query;
+          content = ctx.inlineQuery.query || '';
           break;
 
         case 'chosen_inline_result':
           updateTypeId = ctx.chosenInlineResult.result_id;
-          content = ctx.chosenInlineResult.query;
+          content = ctx.chosenInlineResult.query || '';
           break;
 
         case 'shipping_query':
           updateTypeId = ctx.shippingQuery.id;
-          content = ctx.shippingQuery.invoice_payload;
+          content = ctx.shippingQuery.invoice_payload || '';
           break;
 
         case 'pre_checkout_query':
           updateTypeId = ctx.preCheckoutQuery.id;
-          content = ctx.preCheckoutQuery.invoice_payload;
+          content = ctx.preCheckoutQuery.invoice_payload || '';
           break;
 
         default:
@@ -82,29 +82,29 @@ class TelegrafLogger {
           updateTypeId = null;
       }
 
-      const { from = {}, chat = {}, session = {} } = ctx;
+      const { from = {}, chat = {}, session = {}, updateSubTypes = [] } = ctx;
       const text = this.options.format
-        .replace(/%botUsername\b/igm, ctx.me || null)
-        .replace(/%username\b/igm, from.username || null)
-        .replace(/%firstName\b/igm, from.first_name)
-        .replace(/%lastName\b/igm, from.last_name || '')
-        .replace(/%fromId\b/igm, from.id)
-        .replace(/%chatId\b/igm, chat.id || null)
-        .replace(/%chatType\b/igm, chat.type || null)
-        .replace(/%chatTitle\b/igm, chat.title || null)
-        .replace(/%chatUsername\b/igm, chat.username || null)
-        .replace(/%updateId\b/igm, ctx.update.update_id)
-        .replace(/%updateType\b/igm, ctx.updateType)
-        .replace(/%updateTypeId\b/igm, updateTypeId)
-        .replace(/%updateSubType\b/igm, ctx.updateSubType || ctx.updateSubTypes[0] || ctx.updateType)
-        .replace(/%sceneId\b/igm, (session._flow && session._flow.id) || null)
+        .replace(/%me\b/igm, ctx.me || null)
+        .replace(/%u\b/igm, from.username || null)
+        .replace(/%fn\b/igm, from.first_name)
+        .replace(/%ln\b/igm, from.last_name || '')
+        .replace(/%fi\b/igm, from.id)
+        .replace(/%ci\b/igm, chat.id || null)
+        .replace(/%ct\b/igm, chat.type || null)
+        .replace(/%ctl\b/igm, chat.title || null)
+        .replace(/%cu\b/igm, chat.username || null)
+        .replace(/%ui\b/igm, ctx.update.update_id)
+        .replace(/%ut\b/igm, ctx.updateType)
+        .replace(/%uti\b/igm, updateTypeId)
+        .replace(/%ust\b/igm, ctx.updateSubType || updateSubTypes[0] || ctx.updateType)
+        .replace(/%si\b/igm, (session.__scenes && session.__scenes.current) || null)
         .replace(/ +/g, ' ');
 
       if (content.length > this.options.contentLength) {
         content = `${content.slice(0, this.options.contentLength)}...`;
       }
 
-      this.options.log(text.replace(/%content\b/igm, content.replace(/\n/g, ' ')));
+      this.options.log(text.replace(/%c\b/igm, content.replace(/\n/g, ' ')));
       return next();
     };
   }

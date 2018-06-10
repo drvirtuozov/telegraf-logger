@@ -10,7 +10,7 @@ const bot = new Telegraf('TOKEN');
 const logger = new TelegrafLogger({
   log: AwesomeLogger.log, // default: console.log
   // replace or remove placeholders as necessary
-  format: '%updateType => @%username %firstName %lastName (%fromId): <%updateSubType> %content', // default
+  format: '%ut => @%u %fn %ln (%fi): <%ust> %c', // default
   contentLength: 100, // default
 }); // All the default values can be omitted
 
@@ -20,8 +20,21 @@ const logger = new TelegrafLogger({
 bot.use(logger.middleware());
 ```
 ### Available Placeholders
+The following format specifiers stands for:
 ```
-botUsername, username, firstName, lastName, fromId, chatId,
-chatType, chatTitle, chatUsername, updateId, updateType,
-updateTypeId, updateSubType, sceneId, content
+%me — bot username
+%u — username
+%fn — first name
+%ln — last name
+%fi — from id
+%ci — chat id
+%ct — chat type
+%ctl — chat title
+%cu — chat username
+%ui — update id
+%ut — update type
+%uti — update type id
+%ust — update sub type
+%si — scene id
+%c — content
 ```
