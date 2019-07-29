@@ -4,7 +4,7 @@
   "description": "A simple logging incoming updates middleware for Telegraf bot framework",
   "main": "index.js",
   "scripts": {
-    "predeploy": "npm run build",
+    "prepublish": "npm run build",
     "build": "tsc"
   },
   "repository": {
