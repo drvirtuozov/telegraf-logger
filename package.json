@@ -4,7 +4,8 @@
   "description": "A simple logging incoming updates middleware for Telegraf bot framework",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "predeploy": "npm run build",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -28,5 +29,8 @@
     "eslint": "^3.18.0",
     "eslint-config-airbnb-base": "^11.1.2",
     "eslint-plugin-import": "^2.2.0"
+  },
+  "dependencies": {
+    "telegraf": "^3.30.1"
   }
 }
