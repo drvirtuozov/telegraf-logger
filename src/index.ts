@@ -1,19 +1,22 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-console */
+import { ContextMessageUpdate, Middleware } from 'telegraf';
 
 class TelegrafLogger {
-  constructor(options) {
-    this.options = Object.assign({
-      log: console.log,
-      format: '%ut => @%u %fn %ln (%fi): <%ust> %c',
-      contentLength: 100,
-    }, options);
+  private options: LoggerOptions = {
+    log: console.log,
+    format: '%ut => @%u %fn %ln (%fi): %c',
+    contentLength: 100,
+  } 
+
+  constructor(options?: LoggerOptions) {
+    if (options) {
+      this.options = {...this.options, ...options};
+    }
   }
 
-  middleware() {
-    return (ctx, next) => {
-      let content;
-      let updateTypeId;
+  public middleware(): Middleware<ContextMessageUpdate> {
+    return (ctx: ContextMessageUpdate, next: Function) => {
+      let content: string | undefined;
+      let updateTypeId: string | number | undefined;
 
       switch (ctx.updateType) {
         case 'message':
@@ -81,23 +84,21 @@ class TelegrafLogger {
           content = '';
           updateTypeId = null;
       }
-
-      const { from = {}, chat = {}, session = {}, updateSubTypes = [] } = ctx;
+      
+      const { from, chat } = ctx;
       const text = this.options.format
         .replace(/%me\b/igm, ctx.me || null)
         .replace(/%u\b/igm, from.username || null)
         .replace(/%fn\b/igm, from.first_name)
         .replace(/%ln\b/igm, from.last_name || '')
-        .replace(/%fi\b/igm, from.id)
-        .replace(/%ci\b/igm, chat.id || null)
+        .replace(/%fi\b/igm, String(from.id))
+        .replace(/%ci\b/igm, String(chat.id) || null)
         .replace(/%ct\b/igm, chat.type || null)
         .replace(/%ctl\b/igm, chat.title || null)
         .replace(/%cu\b/igm, chat.username || null)
-        .replace(/%ui\b/igm, ctx.update.update_id)
+        .replace(/%ui\b/igm, String(ctx.update.update_id))
         .replace(/%ut\b/igm, ctx.updateType)
-        .replace(/%uti\b/igm, updateTypeId)
-        .replace(/%ust\b/igm, ctx.updateSubType || updateSubTypes[0] || ctx.updateType)
-        .replace(/%si\b/igm, (session.__scenes && session.__scenes.current) || null)
+        .replace(/%uti\b/igm, String(updateTypeId))
         .replace(/ +/g, ' ');
 
       if (content.length > this.options.contentLength) {
@@ -110,4 +111,11 @@ class TelegrafLogger {
   }
 }
 
-module.exports = TelegrafLogger;
+
+interface LoggerOptions {
+  log?: Function;
+  format?: string;
+  contentLength?: number;
+}
+
+export default TelegrafLogger;
