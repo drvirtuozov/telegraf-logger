@@ -2,7 +2,8 @@
   "name": "telegraf-logger",
   "version": "3.0.0",
   "description": "A simple logging incoming updates middleware for Telegraf bot framework",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc"
